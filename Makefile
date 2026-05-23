@@ -71,6 +71,10 @@ env:
 test:
 	go test ./...
 
+## Run Go tests with verbose output
+test-verbose:
+	go test -v ./...
+
 ## Run Go linter
 lint:
 	golangci-lint run ./...
