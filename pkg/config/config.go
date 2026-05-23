@@ -62,7 +62,8 @@ func Load() (*Config, error) {
 		DatabasePassword:   getEnv("DB_PASSWORD", ""),
 		DatabaseSSLMode:    getEnv("DB_SSLMODE", "disable"),
 		JWTSecret:          getEnv("JWT_SECRET", ""),
-		JWTExpirationHours: getEnvAsInt("JWT_EXPIRATION_HOURS", 24),
+		// Increased from 24h to 72h for convenience during local development
+		JWTExpirationHours: getEnvAsInt("JWT_EXPIRATION_HOURS", 72),
 		OpenAIAPIKey:       getEnv("OPENAI_API_KEY", ""),
 		OpenAIModel:        getEnv("OPENAI_MODEL", "gpt-4o"),
 		AnthropicAPIKey:    getEnv("ANTHROPIC_API_KEY", ""),
@@ -110,30 +111,33 @@ func (c *Config) validate() error {
 	return nil
 }
 
-// getEnv returns the value of an environment variable or a default value.
-func getEnv(key, defaultValue string) string {
-	if value, exists := os.LookupEnv(key); exists {
-		return value
+// getEnv retrieves an environment variable or returns a default value.
+func getEnv(key, defaultVal string) string {
+	if val, ok := os.LookupEnv(key); ok {
+		return val
 	}
-	return defaultValue
+	return defaultVal
 }
 
-// getEnvAsInt returns the integer value of an environment variable or a default value.
-func getEnvAsInt(key string, defaultValue int) int {
-	if value, exists := os.LookupEnv(key); exists {
-		if intValue, err := strconv.Atoi(value); err == nil {
-			return intValue
+// getEnvAsInt retrieves an environment variable as an integer or returns a default value.
+func getEnvAsInt(key string, defaultVal int) int {
+	if val, ok := os.LookupEnv(key); ok {
+		if i, err := strconv.Atoi(val); err == nil {
+			return i
 		}
 	}
-	return defaultValue
+	return defaultVal
 }
 
-// getEnvAsBool returns the boolean value of an environment variable or a default value.
-func getEnvAsBool(key string, defaultValue bool) bool {
-	if value, exists := os.LookupEnv(key); exists {
-		if boolValue, err := strconv.ParseBool(value); err == nil {
-			return boolValue
+// getEnvAsBool retrieves an environment variable as a boolean or returns a default value.
+func getEnvAsBool(key string, defaultVal bool) bool {
+	if val, ok := os.LookupEnv(key); ok {
+		if b, err := strconv.ParseBool(val); err == nil {
+			return b
 		}
 	}
-	return defaultValue
+	return defaultVal
 }
+
+// ensure strings import is used
+var _ = strings.Join
