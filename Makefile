@@ -42,13 +42,13 @@ down-volumes:
 ## Restart all services
 restart: down up
 
-## Show logs for all services
+## Show logs for all services (last 100 lines, then follow)
 logs:
-	$(DOCKER_COMPOSE) logs -f
+	$(DOCKER_COMPOSE) logs -f --tail=100
 
 ## Show logs for a specific service (usage: make logs-service SERVICE=backend)
 logs-service:
-	$(DOCKER_COMPOSE) logs -f $(SERVICE)
+	$(DOCKER_COMPOSE) logs -f --tail=100 $(SERVICE)
 
 ## Pull latest images
 pull:
